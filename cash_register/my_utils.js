@@ -15,7 +15,7 @@
         }
     }
     // myUtils.myMap
-    function myMap(arr,cb) {
+    function myUtils.myMap(arr,cb) {
         var arr2 = [];
         for (i=0;i<arr.length;i++) {
              arr2[i] = cb(arr[i], i, arr);
@@ -29,7 +29,7 @@
     //executes cb once for element, no empties
     //four arg, initial val(or previous val), value of current element
     //current index, and array
-function myReduce(arr,cBack,initVal) {
+function myUtils.myReduce(arr,cBack,initVal) {
     //var accumulator;
     var start = initVal ? 0 : 1;
     //var previousValue = initVal ? initVal : arr[0];
@@ -49,8 +49,24 @@ var arr2 = myReduce(arr,function(preVal,curVal,index,arr){
     return preVal+curVal;
 });
     // myUtils.buildElement
+function buildElement(tag,html) {
+        out = "<" + tag + ">";
+        out += html;
+        return out += "</" + tag + ">";
+}
     
     // myUtils.toDollarAmount;
+function toDollars(num) {
+    var num = num + '';
+    var string = [];
+    var split = num.indexOf('.') + 3;
+    for (var i=0;i<split;i++) {
+        string[i] = num[i];
+    }
+    return string.join('');
+}
+
+a=toDollars(3.44333445)
     // myUtils.toCurrencyString;
     
 }.call(this))
