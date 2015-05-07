@@ -17,7 +17,9 @@ var coupons = [
 
 var $entries, 
     $subTotal;
-
+var subTotalPrice= 0; // !stuck here for a while, this wasn't set to 0, and I kept getting undefined as a result
+var salesTax = 0;
+var total = 0;
 $(document).ready(function(){
 
    $entries = $("#entries");
@@ -28,24 +30,47 @@ $(document).ready(function(){
   });
 
   updateSubTotal();
-
+  updateSalesTax();
+  updateTotal();
 
 });
 
 function addItem(price, title, quantity) {
   // YUCK! Let's refactor this!
-  var html_string = (
-        "<tr>" +
-          "<td>" +  title + "</td>" +
-          "<td>" + quantity + "</td>" +
-          "<td>" + price + "</td>" +
-        "</tr>"
-  );
-  $entries.append(html_string);
+  // var html_string = (
+  //       "<tr>" +
+  //         "<td>" +  title + "</td>" +
+  //         "<td>" + quantity + "</td>" +
+  //         "<td>" + price + "</td>" +
+  //       "</tr>"
+  // );
+
+html = myUtils.buildElement("tr",
+    myUtils.buildElement('td',title) + 
+    myUtils.buildElement('td',quantity) + 
+    myUtils.buildElement('td',price));
+
+  $entries.append(html  );
 }
 
 function updateSubTotal() {
-// Refactor this using our helper functions :D
-  var subTotalPrice = 0; // !! That won't do! Calculate the actual subtotal.
-  $subTotal.text("$" + price); 
+  myUtils.myEach(line_items, function(object){
+      subTotalPrice += (object['price'])  * object['qty'];
+      //console.log("stp: " + subTotalPrice + "objPrice: " + object['price'] + "objQty:" + object['qty'] );
+    });
+  $subTotal.text("$" + subTotalPrice); 
+}
+
+function updateSalesTax() {
+  salesTax = subTotalPrice * .0725;
+  $('#salestax').text('$' + myUtils.toDollars (salesTax));
+}
+
+function updateTotal() {
+  total = salesTax + subTotalPrice;
+  $('#total').text('$' + myUtils.toDollars(total));
+}
+
+function lineTotal(quantity,priceEach) {
+  return quantity * priceEach;
 }
